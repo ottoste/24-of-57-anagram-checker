@@ -1,6 +1,8 @@
 defmodule AnagramCheckerTest do
   use ExUnit.Case
+  import ExUnit.CaptureIO
   doctest AnagramChecker
+
 
   test "two words of one character being the same" do
   	assert AnagramChecker.is_anagram("a", "a") == true
@@ -30,4 +32,16 @@ defmodule AnagramCheckerTest do
   test "two words with different length" do
   	assert AnagramChecker.is_anagram("note", "noted") == false
   end
+
+  test "displays the result to user" do
+    assert capture_io(fn -> AnagramChecker.display("john", "john") end) == "\"john\" and \"john\" are anagrams.\n"
+  end
+
+  test "gets user input" do
+    capture_io([input: "note", capture_prompt: false], fn -> 
+      input = AnagramChecker.prompt_for_first_word 
+      IO.write input
+    end) == "note"
+  end
+
 end
